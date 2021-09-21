@@ -115,7 +115,7 @@ exports.graphToByteArrays = function(graph) {
 
     if (attr.hidden) {
       hiddenNodes[node] = true;
-    } 
+    }
     else {
       // Node index
       index[node] = j;

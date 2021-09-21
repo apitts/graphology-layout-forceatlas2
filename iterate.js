@@ -763,7 +763,7 @@ module.exports = function iterate(options, NodeMatrix, EdgeMatrix) {
         nodespeed =
           0.1 * Math.log(1 + traction) / (1 + Math.sqrt(swinging));
 
-        if(nodespeed > (MAX_FORCE * options.slowDown / force)) {
+        if (nodespeed > (MAX_FORCE * options.slowDown / force)) {
           nodespeed = MAX_FORCE * options.slowDown / force;
         }
 
