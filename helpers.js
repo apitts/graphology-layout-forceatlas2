@@ -113,12 +113,12 @@ exports.graphToByteArrays = function(graph) {
   j = 0;
   graph.forEachNode(function(node, attr) {
 
-    if(attr.hidden) {
+    if (attr.hidden) {
       hiddenNodes[node] = true;
-    } else {
+    } 
+    else {
       // Node index
       index[node] = j;
-  
       // Populating byte array
       NodeMatrix[j] = attr.x;
       NodeMatrix[j + 1] = attr.y;
@@ -138,7 +138,7 @@ exports.graphToByteArrays = function(graph) {
   j = 0;
   graph.forEachEdge(function(edge, attr, source, target) {
 
-    if(!attr.hidden && !hiddenNodes[source] && !hiddenNodes[target]) {
+    if (!attr.hidden && !hiddenNodes[source] && !hiddenNodes[target]) {
       // Populating byte array
       EdgeMatrix[j] = index[source];
       EdgeMatrix[j + 1] = index[target];
