@@ -103,6 +103,7 @@ exports.graphToByteArrays = function(graph) {
   var order = graph.order,
       size = graph.size,
       index = {},
+      hiddenNodes = {},
       j;
 
   var NodeMatrix = new Float32Array(order * PPN),
@@ -112,32 +113,39 @@ exports.graphToByteArrays = function(graph) {
   j = 0;
   graph.forEachNode(function(node, attr) {
 
-    // Node index
-    index[node] = j;
-
-    // Populating byte array
-    NodeMatrix[j] = attr.x;
-    NodeMatrix[j + 1] = attr.y;
-    NodeMatrix[j + 2] = 0;
-    NodeMatrix[j + 3] = 0;
-    NodeMatrix[j + 4] = 0;
-    NodeMatrix[j + 5] = 0;
-    NodeMatrix[j + 6] = 1 + graph.degree(node);
-    NodeMatrix[j + 7] = 1;
-    NodeMatrix[j + 8] = attr.size || 1;
-    NodeMatrix[j + 9] = attr.fixed ? 1 : 0;
-    j += PPN;
+    if(attr.hidden) {
+      hiddenNodes[node] = true;
+    } else {
+      // Node index
+      index[node] = j;
+  
+      // Populating byte array
+      NodeMatrix[j] = attr.x;
+      NodeMatrix[j + 1] = attr.y;
+      NodeMatrix[j + 2] = 0;
+      NodeMatrix[j + 3] = 0;
+      NodeMatrix[j + 4] = 0;
+      NodeMatrix[j + 5] = 0;
+      NodeMatrix[j + 6] = 1 + graph.degree(node);
+      NodeMatrix[j + 7] = 1;
+      NodeMatrix[j + 8] = attr.size || 1;
+      NodeMatrix[j + 9] = attr.fixed ? 1 : 0;
+      j += PPN;
+    }
   });
 
   // Iterate through edges
   j = 0;
   graph.forEachEdge(function(edge, attr, source, target) {
 
-    // Populating byte array
-    EdgeMatrix[j] = index[source];
-    EdgeMatrix[j + 1] = index[target];
-    EdgeMatrix[j + 2] = attr.weight || 0;
-    j += PPE;
+    if(!attr.hidden && !hiddenNodes[source] && !hiddenNodes[target]) {
+      // Populating byte array
+      EdgeMatrix[j] = index[source];
+      EdgeMatrix[j + 1] = index[target];
+      EdgeMatrix[j + 2] = attr.weight || 0;
+      j += PPE;
+    }
+
   });
 
   return {
