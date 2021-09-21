@@ -632,10 +632,9 @@ module.exports = function iterate(options, NodeMatrix, EdgeMatrix) {
     if (adjustSizes === true) {
 
       distance = Math.sqrt(
-        (Math.pow(xDist, 2) + Math.pow(yDist, 2)) -
+        (Math.pow(xDist, 2) + Math.pow(yDist, 2))) -
         NodeMatrix[n1 + NODE_SIZE] -
-        NodeMatrix[n2 + NODE_SIZE]
-      );
+        NodeMatrix[n2 + NODE_SIZE];
 
       if (options.linLogMode) {
         if (options.outboundAttractionDistribution) {
